@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <ul style="display: flex; gap: 10px;">
+        <li><a href="/">Home</a></li>
+        <li><a href="success.html">Cancel</a></li>
+        <li><a href="cancel.html">Cancel</a></li>
+    </ul>
+    <script>
+        const stripe = require('stripe')('sk_test_51LttQRH929PLbCYhfssq1oskUMGeL0vxT2YQMI450AuEFmW9iMQxZNx2ZP4CJYo0dv5jTqCx96EOmviUd3nfXFDZ00YGPDijL5');
+
+        exports.handler = async (event, context) => {
+            const session = await stripe.checkout.sessions.create({
+                payment_method_types: ['card'],
+                line_items: [
+                    {
+                        price: 'prod_Qox9StlwncN1Q0', // Replace with your Price ID
+                        quantity: 1,
+                    },
+                ],
+                mode: 'payment',
+                success_url: 'https://yourwebsite.com/success',
+                cancel_url: 'https://yourwebsite.com/cancel',
+            });
+
+            return {
+                statusCode: 200,
+                body: JSON.stringify({ id: session.id }),
+            };
+        };
+
+    </script>
+</body>
+
+</html>
